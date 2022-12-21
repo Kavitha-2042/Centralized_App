@@ -28,6 +28,7 @@ const SignIn = () => {
       .then(async (signInResponse) => {
         if (signInResponse.data.auth === true) {
             localStorage.setItem("jwt-token", signInResponse.data.token);
+            localStorage.setItem("email", email)
             dispatch(
               initialize({
                 user: signInResponse.data.user,
@@ -35,7 +36,8 @@ const SignIn = () => {
               })
             );
           setTimeout(() => {
-            navigate("/");
+            navigate("/qrcode");
+            window.location.reload()
           }, 4000);
           toast.success(signInResponse.data.message, {
             position: toast.POSITION.TOP_CENTER,

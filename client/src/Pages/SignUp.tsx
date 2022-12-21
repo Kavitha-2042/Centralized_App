@@ -12,7 +12,7 @@ const SignUp = () => {
   const [conPassword, setConPassword] = useState("");
   const [clicked, setClicked] = useState(false);
   const [address, setAddress] = useState("")
-  const [privateKey, setPrivateKey] = useState("")
+  // const [privateKey, setPrivateKey] = useState("")
 
   // const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const SignUp = () => {
       .then(async (signUpResponse) => {
         if (signUpResponse.data.auth === true) {
           setAddress(signUpResponse.data.address)
-          setPrivateKey(signUpResponse.data.originalKey)
+          // setPrivateKey(signUpResponse.data.originalKey)
           toast.success(signUpResponse.data.message, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
@@ -64,9 +64,9 @@ const SignUp = () => {
           <Header/>
             <div className='m-10'>
         <h1 className='text-5xl text-bold '>Account Details</h1>
-        <h4 className='text-4xl mt-7'>Kindly note your account address and private key!</h4>
+        <h4 className='text-4xl mt-7'>Kindly note your account address!</h4>
         <h5 className='text-3xl mt-7'>Your address: <span className="text-xl">{address}</span></h5>
-        <h5 className='text-3xl mt-3'>Your private key : <span className="text-xl">{privateKey}</span></h5>
+        {/* <h5 className='text-3xl mt-3'>Your private key : <span className="text-xl">{privateKey}</span></h5> */}
         <Link to='/signin'><button className='mt-7'>Click Here to move to signin!!</button></Link>
     </div>
           </div>

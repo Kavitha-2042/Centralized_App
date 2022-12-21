@@ -3,6 +3,8 @@ import { useAppDispatch, useAppState } from '../Redux/Hooks'
 import { initialize } from '../Redux/Slice/userSlice'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import Deposit from '../Pages/Deposit';
+import WithDraw from '../Pages/WithDraw';
 
 const Header = () => {
 
@@ -27,7 +29,10 @@ const Header = () => {
       {
         auth?
         <div className='flex justify-between space-x-4'>
-          
+          <Link to='/qrcode'>QR</Link>
+          <Link to='/deposit'>Deposit</Link>
+          <Link to='/withdraw'>WithDraw</Link>
+          <Link to='/signout'>Signout</Link>
         </div>
         :
         <div className='flex justify-between space-x-4'>

@@ -4,6 +4,10 @@ import mongoose from "mongoose"
 import joi from "joi"
 import jwt from "jsonwebtoken"
 import bcryptjs from "bcryptjs"
+import Tx from "ethereumjs-tx"
+const Moralis = require("moralis").default;
+const { EvmChain } = require("@moralisweb3/common-evm-utils");
+
 import userModel from "../Model/userModel"
 import { ModifiedRequest } from "../interface"
 
@@ -130,4 +134,70 @@ export const Status = (req:ModifiedRequest, res: express.Response) =>{
             auth: true, 
             token: req.headers
         })
+}
+
+export const QRcode = (req:ModifiedRequest, res:express.Response) =>{
+    const { email }  = req.body
+
+    userModel.find({ email })
+    .then((findResponse)=>{
+        web3.eth.getBalance(findResponse[0].address as string)
+        .then((balanceResponse)=>{
+            return res.json({
+                message:"address sent!",
+                address: findResponse[0].address,
+                balance: web3.utils.fromWei(balanceResponse, "ether")
+            })
+        })
+        .catch(err=>console.log(err))
+    })
+    .catch(err=>console.log(err))
+}
+
+export const TransactionHistory = (req:express.Request, res:express.Response) =>{
+    const { email } = req.body 
+
+    userModel.find({ email })
+    .then((findResponse)=>{
+       const address = findResponse[0].address
+       console.log(address)
+       web3.eth.getBalance(address as string)
+       .then(console.log)
+       web3.eth.getBlockNumber()
+       .then(console.log)
+        //  web3.eth.getTransactionCount(address as string)
+         web3.eth.getTransactionCount("0x47f4d3fad99e81e54e391E91ae7781547B51B238")
+         .then(console.log)
+
+        // const lastBlockNumber = web3.eth.getBlockNumber()
+       web3.eth.getBlock("latest")
+       .then((block)=>{
+        console.log({
+            blockHash: block.hash,
+            blockNumber: block.number
+            
+        })
+        var blockHash = block.hash;
+        web3.eth.getTransaction(block.hash)
+        .then(console.log)
+
+        
+
+        // var transaction = web3.eth.getTransactionFromBlock(block.number, 3)
+        var transaction = web3.eth.getTransactionFromBlock(8173703, 3)
+        .then((response)=>{
+            return res.json({
+                message:"check",
+                res:response
+            })
+        })
+        
+       })
+    })
+    .catch(err=>console.log(err))
+}
+
+
+export const withdraw = (req:express.Request, res:express.Response) =>{
+    
 }
