@@ -8,6 +8,7 @@ import SignOut from './Pages/SignOut';
 import SignUp from './Pages/SignUp';
 import Deposit from './Pages/Deposit';
 import WithDraw from './Pages/WithDraw';
+import Transfer from './Pages/Transfer';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path='/qrcode' element={<QRcode/>}/>
         <Route path='/deposit' element={<Deposit/>}/>
         <Route path='/withdraw' element={<WithDraw/>}/>
+        <Route path='/transfer' element={<Transfer/>}/>
 
       </Routes>
       </BrowserRouter>

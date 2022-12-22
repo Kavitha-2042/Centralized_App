@@ -13,6 +13,5 @@ userRoute.get('/status', middleware, userController.Status)
 
 userRoute.post('/qrcode', userController.QRcode)
 
-userRoute.post('/history', userController.TransactionHistory)
 
 export default userRoute

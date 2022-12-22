@@ -30,6 +30,7 @@ const Header = () => {
         auth?
         <div className='flex justify-between space-x-4'>
           <Link to='/qrcode'>QR</Link>
+          <Link to='/transfer'>Transfer</Link>
           <Link to='/deposit'>Deposit</Link>
           <Link to='/withdraw'>WithDraw</Link>
           <Link to='/signout'>Signout</Link>
