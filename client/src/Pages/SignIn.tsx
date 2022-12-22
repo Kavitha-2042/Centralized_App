@@ -23,6 +23,17 @@ const SignIn = () => {
       });
     }
 
+
+    const regEx =  /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+    if(!regEx.test(email) && email !== ""){
+      toast.error("Invalid email", {
+        position: toast.POSITION.TOP_CENTER,
+        theme: "light",
+        autoClose: 2000,
+      });
+    }
+
+
     axios
       .post("/user/signin", { email, password })
       .then(async (signInResponse) => {

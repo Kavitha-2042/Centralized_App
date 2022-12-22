@@ -19,7 +19,7 @@ export const SignUp = asyncHandler(async(req:express.Request, res:express.Respon
     const validation = joi.object({
         name: joi.string(),
         email: joi.string().email(),
-        password: joi.string(),
+        password: joi.string().min(8).max(20).uppercase().lowercase(),
         conPassword: joi.string()
     })
 
@@ -65,7 +65,7 @@ export const SignIn = asyncHandler(async(req:express.Request, res:express.Respon
 
     const validation = joi.object({
         email: joi.string().email().required(),
-        password: joi.string().required()
+        password: joi.string().min(8).max(20).uppercase().lowercase(),
     })
 
     const validationResponse = await validation.validateAsync( { email, password})

@@ -12,9 +12,21 @@ const SignUp = () => {
   const [conPassword, setConPassword] = useState("");
   const [clicked, setClicked] = useState(false);
   const [address, setAddress] = useState("")
-  // const [privateKey, setPrivateKey] = useState("")
 
-  // const navigate = useNavigate();
+const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+
+  const passwordHandler = (e:any)  =>{
+    setPassword(e.target.value);
+     
+  }
+
+  const conPasswordHandler = (e:any)=>{
+    setConPassword(e.target.value);
+
+    
+    
+  }
 
   const eventHandler = async (e: any) => {
     e.preventDefault();
@@ -27,12 +39,41 @@ const SignUp = () => {
       });
     }
 
+    const regEx =  /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+    if(!regEx.test(email) && email !== ""){
+      toast.error("Invalid email", {
+        position: toast.POSITION.TOP_CENTER,
+        theme: "light",
+        autoClose: 2000,
+      });
+    }
+
+
+    if((!strongRegex.test(password)) || (!mediumRegex.test(password))){
+      toast.warn("password is weak!", {
+        position: toast.POSITION.TOP_CENTER,
+        theme: "light",
+        autoClose: 2000,
+      });
+    }
+
+    if(password !== conPassword){
+      setTimeout(() => {
+        toast.error("Password doesn't match with confirm password", {
+          position: toast.POSITION.TOP_CENTER,
+          theme: "light",
+          autoClose: 2000,
+        });
+        
+      }, 3000);
+    }
+   
+
     axios
       .post("/user/signup", { name, email, password, conPassword })
       .then(async (signUpResponse) => {
         if (signUpResponse.data.auth === true) {
           setAddress(signUpResponse.data.address)
-          // setPrivateKey(signUpResponse.data.originalKey)
           toast.success(signUpResponse.data.message, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
@@ -47,9 +88,6 @@ const SignUp = () => {
           });
         }
 
-        // setTimeout(() => {
-        //   navigate("/userAccountPage");
-        // }, 4000);
       })
 
       .catch((err) => console.log(err));
@@ -66,7 +104,6 @@ const SignUp = () => {
         <h1 className='text-5xl text-bold '>Account Details</h1>
         <h4 className='text-4xl mt-7'>Kindly note your account address!</h4>
         <h5 className='text-3xl mt-7'>Your address: <span className="text-xl">{address}</span></h5>
-        {/* <h5 className='text-3xl mt-3'>Your private key : <span className="text-xl">{privateKey}</span></h5> */}
         <Link to='/signin'><button className='mt-7'>Click Here to move to signin!!</button></Link>
     </div>
           </div>
@@ -77,7 +114,6 @@ const SignUp = () => {
         <div className="flex justify-center">
           <div
             style={{
-              // backgroundColor: "#131355",
               backgroundColor: "lavender",
             }}
             className="block p-6 rounded-lg shadow-2xl max-w-lg  m-48"
@@ -101,11 +137,11 @@ const SignUp = () => {
                 type="text"
                 name="username"
                 placeholder=" username..."
+                
                 required
                 style={{
                   border: "0.1rem solid #4e0eff",
                   borderRadius: "0.4rem",
-                  // backgroundColor: "#131324",
                 }}
                 className="rounded-md  ml-6 required p-1 m-2 border border-blue-700   text-start"
                 onChange={(e: any) => {
@@ -138,9 +174,7 @@ const SignUp = () => {
                   borderRadius: "0.4rem",
                 }}
                 className="rounded-md  ml-6 required p-1 m-2 border border-blue-700   text-start"
-                onChange={(e: any) => {
-                  setPassword(e.target.value);
-                }}
+                onChange={passwordHandler}
               />
               <br />
               <input
@@ -153,9 +187,7 @@ const SignUp = () => {
                   borderRadius: "0.4rem",
                 }}
                 className="rounded-md  ml-6 required p-1 m-2 border border-blue-700   text-start"
-                onChange={(e: any) => {
-                  setConPassword(e.target.value);
-                }}
+                onChange={conPasswordHandler}
               />
             </div>
             <br />
