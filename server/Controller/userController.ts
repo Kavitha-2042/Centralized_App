@@ -64,7 +64,7 @@ export const SignIn = asyncHandler(async(req:express.Request, res:express.Respon
     const { email, password } = req.body;
 
     const validation = joi.object({
-        email: joi.string().email().required(),
+        email: joi.string().email(),
         password: joi.string().min(8).max(20).uppercase().lowercase(),
     })
 

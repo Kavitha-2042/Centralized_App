@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import { InputAdornment, TextField } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
 import { useAppDispatch } from "../Redux/Hooks";
 import { initialize } from "../Redux/Slice/userSlice";
@@ -10,22 +13,29 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [visible, setVisible] = useState(false);
+  const [icon, setIcon] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const eyeHandler = () => {
+    setVisible(!visible);
+    setIcon(!icon);
+  };
 
   const eventHandler = async (e: any) => {
     e.preventDefault();
     if (email === "" || password === "") {
       toast.info("All fields are required", {
         position: toast.POSITION.TOP_CENTER,
-       
+
         autoClose: 2000,
       });
     }
 
-
-    const regEx =  /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
-    if(!regEx.test(email) && email !== ""){
+    const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+    if (!regEx.test(email) && email !== "") {
       toast.error("Invalid email", {
         position: toast.POSITION.TOP_CENTER,
         theme: "light",
@@ -33,22 +43,21 @@ const SignIn = () => {
       });
     }
 
-
     axios
       .post("/user/signin", { email, password })
       .then(async (signInResponse) => {
         if (signInResponse.data.auth === true) {
-            localStorage.setItem("jwt-token", signInResponse.data.token);
-            localStorage.setItem("email", email)
-            dispatch(
-              initialize({
-                user: signInResponse.data.user,
-                auth: signInResponse.data.auth,
-              })
-            );
+          localStorage.setItem("jwt-token", signInResponse.data.token);
+          localStorage.setItem("email", email);
+          dispatch(
+            initialize({
+              user: signInResponse.data.user,
+              auth: signInResponse.data.auth,
+            })
+          );
           setTimeout(() => {
             navigate("/qrcode");
-            window.location.reload()
+            window.location.reload();
           }, 4000);
           toast.success(signInResponse.data.message, {
             position: toast.POSITION.TOP_CENTER,
@@ -59,7 +68,6 @@ const SignIn = () => {
           toast.error(signInResponse.data.message, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
-            
           });
         }
       })
@@ -92,7 +100,7 @@ const SignIn = () => {
               padding: "1rem",
             }}
           >
-            <input
+            <TextField
               type="email"
               name="email"
               placeholder=" email..."
@@ -100,25 +108,51 @@ const SignIn = () => {
               style={{
                 border: "0.1rem solid #4e0eff",
                 borderRadius: "0.4rem",
+                margin: "2px",
+                marginBottom: "20px",
               }}
-              className="rounded-md  ml-6 required p-1 m-2 border border-blue-700   text-start"
+              className="rounded-md  ml-6 w-full required p-1 m-2 border border-blue-700   text-start"
               onChange={(e: any) => {
                 setEmail(e.target.value);
               }}
             />
             <br />
-            <input
-              type="password"
+            <TextField
+              // type="password"
+              type={visible ? "text" : "password"}
               name="password"
               placeholder="password"
               required
               style={{
                 border: "0.1rem solid #4e0eff",
                 borderRadius: "0.4rem",
+                margin: "2px",
+                // marginBottom: "20px",
               }}
               className="rounded-md  ml-6 required p-1 m-2 border border-blue-700   text-start"
               onChange={(e: any) => {
                 setPassword(e.target.value);
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {icon ? (
+                      <>
+                        <VisibilityIcon
+                          onClick={eyeHandler}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <VisibilityOffIcon
+                          onClick={eyeHandler}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </>
+                    )}
+                  </InputAdornment>
+                ),
               }}
             />
           </div>
@@ -131,7 +165,7 @@ const SignIn = () => {
                 id="exampleCheck2"
               />
               <label
-                className="form-check-label inline-block text-black mr-10"
+                className="  form-check-label inline-block text-black mr-10"
                 htmlFor="exampleCheck2"
               >
                 Remember me
